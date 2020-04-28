@@ -19,17 +19,16 @@ passport.use(new GoogleStrategy({
     clientSecret:keys.googleClientSecret,
     callbackURL:'/auth/google/callback',
     proxy:true
-},(accessToken,refreshToken,profile,done)=>{
-    User.findOne({googleId: profile.id})
-        .then(existUser=>{
-            if(!existUser){
-                // user does not exist
-                new User({googleId:profile.id}).save().then(createdUser=>done(null,createdUser));
+},async (accessToken,refreshToken,profile,done)=>{
+  const existUser =   await User.findOne({googleId: profile.id});
+    if(existUser){
+        return  done(null,existUser);//first argument mean no error and second argument is a user;
+    }
 
-            }else{
-                done(null,existUser);//first argument mean no error and second argument is a user;
-            }
-        })
+    const createdUser = await  new User({googleId:profile.id}).save();
+    done(null,createdUser)
+
+
 
 }));
 
