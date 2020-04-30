@@ -5,6 +5,7 @@ const cookieSession  = require("cookie-session");
 const passport = require("passport");
 const bodyParser = require("body-parser");
 require("./models/user");
+require("./models/survey");
 require("./services/passport");
 
 
@@ -24,6 +25,7 @@ app.use(bodyParser.json());
 
 require("./routes/authRoutes")(app);
 require("./routes/billingRoutes")(app);
+require("./routes/surveyRoute")(app);
 
 
 if(process.env.NODE_ENV === "production"){
